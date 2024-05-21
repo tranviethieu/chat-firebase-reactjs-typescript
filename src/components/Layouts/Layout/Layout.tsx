@@ -6,6 +6,7 @@ import Header from '../Header/Header'
 import HideOnScroll from '../HideOnScroll/HideOnScroll'
 import ScrollTop from '../ScrollTop/ScrollTop'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
+import RequireAuth from '../../protected/RequiredAuth'
 const Layout: React.FC = ({ props }: any) => {
   return (
     <React.Fragment>

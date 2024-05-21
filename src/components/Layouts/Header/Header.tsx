@@ -13,14 +13,22 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState, store } from '../../../store/store'
+import { auth } from '../../../firebase/firebase'
+import { setStateLogin, setToken } from '../../../store/reducers/auth'
+import { setInfoAccount } from '../../../store/reducers/user'
+import { setLoading } from '../../../store/reducers/site'
 
 function Header() {
+  const { infoAccount } = useSelector((state: RootState) => state.user)
   const pages = [
     { title: 'home', action: '/' },
     { title: 'about', action: '/about' },
-    { title: 'profile', action: '/profile' }
+    { title: 'profile', action: '/profile' },
+    { title: 'chat', action: '/chat' }
   ]
-  const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+  const settings = ['Profile', 'Account', 'Logout']
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
   const navigate = useNavigate()
@@ -39,6 +47,14 @@ function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null)
+  }
+  const handleLogout = () => {
+    if (infoAccount) {
+      auth.signOut()
+      store.dispatch(setToken(null))
+      store.dispatch(setStateLogin(false))
+      store.dispatch(setInfoAccount(null))
+    }
   }
   return (
     <Container maxWidth='xl'>
@@ -139,9 +155,12 @@ function Header() {
         </Box>
 
         <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title='Open settings'>
+          <Tooltip title={infoAccount?.displayName}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+              <Avatar
+                alt={infoAccount?.displayName}
+                src={infoAccount?.photoURL ? `${infoAccount?.photoURL}` : '/static/images/avatar/2.jpg'}
+              />
             </IconButton>
           </Tooltip>
           <Menu
@@ -161,7 +180,13 @@ function Header() {
             onClose={handleCloseUserMenu}
           >
             {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
+              <MenuItem
+                key={setting}
+                onClick={() => {
+                  handleCloseUserMenu()
+                  setting == 'Logout' && handleLogout()
+                }}
+              >
                 <Typography textAlign='center'>{setting}</Typography>
               </MenuItem>
             ))}
