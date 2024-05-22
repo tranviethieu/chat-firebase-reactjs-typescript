@@ -19,9 +19,13 @@ import { auth } from '../../../firebase/firebase'
 import { setStateLogin, setToken } from '../../../store/reducers/auth'
 import { setInfoAccount } from '../../../store/reducers/user'
 import { setLoading } from '../../../store/reducers/site'
+import { AppContext, AppContextType } from '../../../Context/AppContext'
+import { AuthContext, AuthContextType } from '../../../Context/AuthProvider'
+import { useContext } from 'react'
 
 function Header() {
-  const { infoAccount } = useSelector((state: RootState) => state.user)
+  const { user } = useContext(AuthContext) as AuthContextType
+  const { clearState } = useContext(AppContext) as AppContextType
   const pages = [
     { title: 'home', action: '/' },
     { title: 'about', action: '/about' },
@@ -49,12 +53,9 @@ function Header() {
     setAnchorElUser(null)
   }
   const handleLogout = () => {
-    if (infoAccount) {
-      auth.signOut()
-      store.dispatch(setToken(null))
-      store.dispatch(setStateLogin(false))
-      store.dispatch(setInfoAccount(null))
-    }
+    // clear state in App Provider when logout
+    //clearState()
+    auth.signOut()
   }
   return (
     <Container maxWidth='xl'>
@@ -155,11 +156,11 @@ function Header() {
         </Box>
 
         <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title={infoAccount?.displayName}>
+          <Tooltip title={user?.displayName}>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar
-                alt={infoAccount?.displayName}
-                src={infoAccount?.photoURL ? `${infoAccount?.photoURL}` : '/static/images/avatar/2.jpg'}
+                alt={user?.displayName || 'aaaa'}
+                src={user?.photoURL ? `${user?.photoURL}` : '/static/images/avatar/2.jpg'}
               />
             </IconButton>
           </Tooltip>

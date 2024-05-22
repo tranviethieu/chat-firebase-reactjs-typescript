@@ -8,16 +8,18 @@ import { Provider } from 'react-redux'
 import { store } from './store/store'
 import { ToastContainer } from 'react-toastify'
 import SplashScreen from './components/Layouts/SplashScreen/SplashScreen'
+import AuthProvider from './Context/AuthProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <SplashScreen />
-        <Routes>
-          <Route path='/*' element={<App />} />
-        </Routes>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+        {/* <SplashScreen /> */}
+
         <ToastContainer autoClose={3000} />
       </BrowserRouter>
     </Provider>

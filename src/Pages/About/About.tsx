@@ -5,7 +5,6 @@ import React from 'react'
 const About: React.FC = () => {
   return (
     <div>
-      {' '}
       <Box>
         {[...new Array(120)]
           .map(

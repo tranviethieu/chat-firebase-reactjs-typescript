@@ -2,11 +2,11 @@
 import React from 'react'
 import { AppBar, Toolbar, Typography, Container, CssBaseline, Fade, Fab } from '@mui/material'
 import { NavLink, Outlet } from 'react-router-dom'
-import Header from '../Header/Header'
 import HideOnScroll from '../HideOnScroll/HideOnScroll'
 import ScrollTop from '../ScrollTop/ScrollTop'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import RequireAuth from '../../protected/RequiredAuth'
+import Header from '../Header/Header'
 const Layout: React.FC = ({ props }: any) => {
   return (
     <React.Fragment>
