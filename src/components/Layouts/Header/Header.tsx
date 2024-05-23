@@ -19,13 +19,13 @@ import { auth } from '../../../firebase/firebase'
 import { setStateLogin, setToken } from '../../../store/reducers/auth'
 import { setInfoAccount } from '../../../store/reducers/user'
 import { setLoading } from '../../../store/reducers/site'
-import { AppContext, AppContextType } from '../../../Context/AppContext'
+import { AppContext } from '../../../Context/AppProvider'
 import { AuthContext, AuthContextType } from '../../../Context/AuthProvider'
 import { useContext } from 'react'
 
 function Header() {
   const { user } = useContext(AuthContext) as AuthContextType
-  const { clearState } = useContext(AppContext) as AppContextType
+  //const { clearState } = useContext(AppContext)
   const pages = [
     { title: 'home', action: '/' },
     { title: 'about', action: '/about' },

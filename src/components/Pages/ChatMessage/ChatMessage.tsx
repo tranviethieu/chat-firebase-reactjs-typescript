@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import firebase from 'firebase/compat/app'
-import { auth } from '../../firebase/firebase'
+import { auth } from '../../../firebase/firebase'
 
 export interface ChatMessageProps {
   message: {

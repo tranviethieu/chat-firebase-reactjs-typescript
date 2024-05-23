@@ -7,7 +7,7 @@ import Spinner from '../components/Layouts/Spinner/Spinner'
 interface User {
   displayName: string | null
   email: string | null
-  uid: string
+  uid: string | null
   photoURL: string | null
 }
 

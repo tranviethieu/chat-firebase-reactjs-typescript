@@ -17,9 +17,7 @@ const Layout: React.FC = ({ props }: any) => {
         </AppBar>
       </HideOnScroll>
       <Toolbar id='back-to-top-anchor' />
-      <Container maxWidth='xl' sx={{ mt: 2 }}>
-        <Outlet />
-      </Container>
+      <Outlet />
       <ScrollTop {...props}>
         <Fab size='small' aria-label='scroll back to top'>
           <KeyboardArrowUpIcon />
