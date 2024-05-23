@@ -1,12 +1,10 @@
-import firebase from 'firebase/compat'
-
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { db } from '../firebase/firebase'
-import { collection, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore'
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 const useFirestore = (namedb: string, condition: any) => {
   const [documents, setDocuments] = useState<any>([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     let collectionRef = query(collection(db, namedb), orderBy('createdAt'))
     if (condition) {
       if (!condition.compareValue || !condition.compareValue.length) {

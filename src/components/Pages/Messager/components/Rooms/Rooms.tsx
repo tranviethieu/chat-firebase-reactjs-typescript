@@ -3,27 +3,9 @@ import { TransitionProps } from '@mui/material/transitions'
 import { RichTreeView } from '@mui/x-tree-view/RichTreeView'
 import { TreeViewBaseItem } from '@mui/x-tree-view/models'
 import { animated, useSpring } from '@react-spring/web'
+import { useContext, useEffect } from 'react'
+import { AppContext } from '../../../../../Context/AppProvider'
 
-const ITEMS: TreeViewBaseItem[] = [
-  {
-    id: '1',
-    label: 'Danh sách các phòng',
-    children: [
-      { id: '2', label: 'Phòng 1' },
-      { id: '3', label: 'Phòng 2' },
-      { id: '4', label: 'Phòng 3' }
-    ]
-  },
-  {
-    id: '5',
-    label: 'Danh sách người dùng',
-    children: [
-      { id: '6', label: 'user 1' },
-      { id: '7', label: 'user 2' },
-      { id: '8', label: 'user 3' }
-    ]
-  }
-]
 function TransitionComponent(props: TransitionProps) {
   const style = useSpring({
     to: {
@@ -39,13 +21,29 @@ function TransitionComponent(props: TransitionProps) {
   )
 }
 function Rooms() {
+  const { rooms, setSelectedRoomId, members } = useContext(AppContext)
+  const handleNodeClick = (nodeId: any, itemIds: any) => {
+    if (itemIds !== '1') {
+      setSelectedRoomId(itemIds)
+    } else {
+      setSelectedRoomId('')
+    }
+  }
+  console.log(members)
   return (
     <RichTreeView
       aria-label='customized'
       defaultExpandedItems={['5']}
       sx={{ overflowX: 'hidden', minHeight: 270, flexGrow: 1, width: '100%' }}
       slotProps={{ item: { slots: { groupTransition: TransitionComponent } } }}
-      items={ITEMS}
+      onSelectedItemsChange={handleNodeClick}
+      items={[
+        {
+          id: '1',
+          label: 'Danh sách các phòng',
+          children: rooms.map((e: any, index: number) => ({ id: String(e.id), label: e?.name }))
+        }
+      ]}
     />
   )
 }

@@ -8,6 +8,7 @@ import { Provider } from 'react-redux'
 import { store } from './store/store'
 import { ToastContainer } from 'react-toastify'
 import AuthProvider from './Context/AuthProvider'
+import AppProvider from './Context/AppProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
@@ -15,10 +16,10 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <AppProvider>
+            <App />
+          </AppProvider>
         </AuthProvider>
-        {/* <SplashScreen /> */}
-
         <ToastContainer autoClose={3000} />
       </BrowserRouter>
     </Provider>

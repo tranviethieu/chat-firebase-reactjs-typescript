@@ -7,6 +7,7 @@ import ScrollTop from '../ScrollTop/ScrollTop'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import RequireAuth from '../../protected/RequiredAuth'
 import Header from '../Header/Header'
+import ModelUpsertRoom from '../../Pages/Messager/components/ModelUpsertRoom/ModelUpsertRoom'
 const Layout: React.FC = ({ props }: any) => {
   return (
     <React.Fragment>
@@ -18,6 +19,7 @@ const Layout: React.FC = ({ props }: any) => {
       </HideOnScroll>
       <Toolbar id='back-to-top-anchor' />
       <Outlet />
+      <ModelUpsertRoom />
       <ScrollTop {...props}>
         <Fab size='small' aria-label='scroll back to top'>
           <KeyboardArrowUpIcon />

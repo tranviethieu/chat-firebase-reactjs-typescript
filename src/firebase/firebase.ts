@@ -1,13 +1,8 @@
-// firebaseConfig.ts
 import { initializeApp } from 'firebase/app'
-import { getFirestore } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+import { connectAuthEmulator, getAuth } from 'firebase/auth'
 import { getAnalytics } from 'firebase/analytics'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyB2BqToYopYUUiMkyzLlhKCKgyXWO9LIss',
   authDomain: 'chatfirebase-2bb26.firebaseapp.com',
@@ -25,5 +20,8 @@ const db = getFirestore(app)
 
 // Initialize Auth
 const auth = getAuth(app)
-
+if (window.location.hostname === 'localhost') {
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099')
+  connectFirestoreEmulator(db, '127.0.0.1', 8080)
+}
 export { app, db, auth, analytics }

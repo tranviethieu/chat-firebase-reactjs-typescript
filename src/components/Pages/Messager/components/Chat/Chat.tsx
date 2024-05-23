@@ -13,20 +13,38 @@ import InfoIcon from '@mui/icons-material/Info'
 import clsx from 'clsx'
 import Grid from '@mui/material/Grid'
 import { Box } from '@mui/material'
+import { AppContext } from '../../../../../Context/AppProvider'
+import { addDocument } from '../../../../../firebase/services'
 interface Props {}
+interface DataMessage {
+  text: string
+  uid: string
+  photoURL: string
+  roomId: string
+  displayName: string
+}
 function Chat({}: Props) {
   const { user } = useContext(AuthContext) as AuthContextType
+  const { selectedRoom, members, setIsInviteMemberVisible } = useContext(AppContext)
   const [checkSize, setCheckSize] = useState<boolean>(true)
   const endRef = useRef(null)
   const [img, setImg] = useState({
     file: null,
     url: ''
   })
-  const [chat, setChat] = useState<any>([])
+  const [chatForm, setChatForm] = useState<DataMessage>({
+    text: '',
+    uid: '',
+    photoURL: '',
+    roomId: '',
+    displayName: ''
+  })
   const [open, setOpen] = useState(false)
   const [text, setText] = useState('')
   const handleEmoji = () => {}
-  const handleSend = () => {}
+  const handleSendSubmit = () => {
+    addDocument('messages', chatForm)
+  }
   const handleImg = () => {}
   return (
     <div className={styles.main}>
@@ -35,8 +53,8 @@ function Chat({}: Props) {
           <div className={styles.user}>
             <img src={user?.photoURL || './avatar.png'} alt='' />
             <div className={styles.texts}>
-              <span>{user?.displayName}</span>
-              <p>{user?.email}</p>
+              <span>{selectedRoom?.name || user?.displayName}</span>
+              <p>{members?.length}</p>
             </div>
           </div>
           <div className={styles.icons}>
@@ -104,12 +122,11 @@ function Chat({}: Props) {
             <div onClick={() => setOpen((prev) => !prev)}>
               <SentimentSatisfiedTwoToneIcon sx={{ color: '#5183fe' }} />
             </div>
-
             <div className={styles.picker}>
               <EmojiPicker open={open} onEmojiClick={handleEmoji} />
             </div>
           </div>
-          <button className={styles.sendButton} onClick={handleSend}>
+          <button className={styles.sendButton} onClick={handleSendSubmit}>
             <SendIcon sx={{ color: 'white' }} />
           </button>
         </div>

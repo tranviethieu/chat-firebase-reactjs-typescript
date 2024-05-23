@@ -9,8 +9,9 @@ import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import Rooms from '../Rooms/Rooms'
 import { Box } from '@mui/material'
+import AppProvider, { AppContext } from '../../../../../Context/AppProvider'
 function AddFriends() {
-  const { user } = useContext(AuthContext) as AuthContextType
+  const { setIsAddRoomVisible } = useContext(AppContext)
   return (
     <div className={styles.chat}>
       <div className={styles.top}>
@@ -23,7 +24,12 @@ function AddFriends() {
           <div className={styles.box}>
             <MoreHorizIcon />
           </div>
-          <div className={styles.box}>
+          <div
+            className={styles.box}
+            onClick={() => {
+              setIsAddRoomVisible(true)
+            }}
+          >
             <AppRegistrationIcon />
           </div>
         </div>
