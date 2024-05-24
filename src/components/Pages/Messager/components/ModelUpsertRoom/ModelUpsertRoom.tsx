@@ -35,8 +35,8 @@ function ModelUpsertRoom() {
   })
   const handleSubmit = (event: any) => {
     event.preventDefault()
-    setForm({ ...form, members: [user?.uid!] })
-    addDocument('rooms', form)
+
+    addDocument('rooms', { ...form, members: [user?.uid] })
     setForm({
       name: '',
       description: '',

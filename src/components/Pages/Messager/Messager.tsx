@@ -5,11 +5,11 @@ import AddFriends from './components/AddFriend/AddFriends'
 
 function Messager() {
   return (
-    <Grid container spacing={0} sx={{ height: 'calc(100vh - 70px)' }}>
-      <Grid xs={3} sx={{ backgroundColor: 'white', height: '100%' }}>
+    <Grid container spacing={2} sx={{ height: 'calc(100vh - 70px)' }}>
+      <Grid item xs={3} sx={{ backgroundColor: 'white', height: '100%' }}>
         <AddFriends />
       </Grid>
-      <Grid xs={9} sx={{ backgroundColor: 'white', height: '100%' }}>
+      <Grid item xs={9} sx={{ backgroundColor: 'white', height: '100%' }}>
         <Chat />
       </Grid>
     </Grid>

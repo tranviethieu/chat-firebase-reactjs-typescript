@@ -17,10 +17,8 @@ export const addDocument = async (nameCollection: string, data: any) => {
       ...data,
       createdAt: serverTimestamp()
     })
-    return '0'
   } catch (error) {
     console.error('Error document: ', error)
-    return '1'
   }
 }
 export const updateDocument = (nameCollection: string, data: any) => {

@@ -29,7 +29,7 @@ function Rooms() {
       setSelectedRoomId('')
     }
   }
-  console.log(members)
+
   return (
     <RichTreeView
       aria-label='customized'

@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './Chat.module.scss'
 import { AuthContext, AuthContextType } from '../../../../../Context/AuthProvider'
 import SentimentSatisfiedTwoToneIcon from '@mui/icons-material/SentimentSatisfiedTwoTone'
@@ -15,37 +15,80 @@ import Grid from '@mui/material/Grid'
 import { Box } from '@mui/material'
 import { AppContext } from '../../../../../Context/AppProvider'
 import { addDocument } from '../../../../../firebase/services'
+import useFirestore from '../../../../../hooks/useFirestore '
+import moment from 'moment'
+import { formatRelative } from 'date-fns'
+import upload from '../../../../../firebase/upload'
 interface Props {}
-interface DataMessage {
-  text: string
-  uid: string
-  photoURL: string
-  roomId: string
-  displayName: string
-}
+
 function Chat({}: Props) {
   const { user } = useContext(AuthContext) as AuthContextType
   const { selectedRoom, members, setIsInviteMemberVisible } = useContext(AppContext)
   const [checkSize, setCheckSize] = useState<boolean>(true)
-  const endRef = useRef(null)
+  const endRef = useRef<HTMLDivElement>(null)
   const [img, setImg] = useState({
     file: null,
     url: ''
   })
-  const [chatForm, setChatForm] = useState<DataMessage>({
-    text: '',
-    uid: '',
-    photoURL: '',
-    roomId: '',
-    displayName: ''
-  })
+
   const [open, setOpen] = useState(false)
   const [text, setText] = useState('')
-  const handleEmoji = () => {}
-  const handleSendSubmit = () => {
-    addDocument('messages', chatForm)
+  const handleEmoji = (e: any) => {
+    setText((prev) => prev + e.emoji)
+    setOpen(false)
   }
-  const handleImg = () => {}
+  const handleSendSubmit = async () => {
+    let imgUrl = null
+    if (img.file) {
+      imgUrl = await upload(img.file)
+    }
+    addDocument('messages', {
+      text: text,
+      uid: user?.uid,
+      photoURL: user?.photoURL,
+      roomId: selectedRoom.id,
+      displayName: user?.displayName,
+      img: imgUrl
+    })
+    setImg({
+      file: null,
+      url: ''
+    })
+    setText('')
+  }
+  const handleImg = (e: any) => {
+    if (e.target.files[0]) {
+      setImg({
+        file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0])
+      })
+    }
+  }
+  const condition = useMemo(
+    () => ({
+      fieldName: 'roomId',
+      operator: '==',
+      compareValue: selectedRoom.id
+    }),
+    [selectedRoom.id]
+  )
+
+  const messages = useFirestore('messages', condition)
+
+  useEffect(() => {
+    endRef?.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+  function formatDate(seconds: any) {
+    let formattedDate = ''
+
+    if (seconds) {
+      formattedDate = formatRelative(new Date(seconds * 1000), new Date())
+
+      formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
+    }
+
+    return formattedDate
+  }
   return (
     <div className={styles.main}>
       <div className={styles.chat}>
@@ -70,35 +113,18 @@ function Chat({}: Props) {
             </div>
           </div>
         </div>
-        <div className={styles.center}>
-          {/* {chat?.messages?.map((message: any) => (
-          <div className={message.senderId === currentUser?.id ? 'message own' : 'message'} key={message?.createAt}>
-            <div className='texts'>
-              {message.img && <img src={message.img} alt='' />}
-              <p>{message.text}</p>
-              <span>{message.createdAt}</span>
-            </div>
-          </div>
-        ))} */}
 
-          <div className={styles.message}>
-            <div className={styles.texts}>
-              <p>testtttt</p>
-              <span>10:07 am</span>
+        <div className={styles.center}>
+          {messages?.map((message: any, index: number) => (
+            <div className={clsx(styles.message, { [styles.own]: message.uid === user?.uid })} key={index}>
+              <div className={styles.texts}>
+                {message.img && <img src={message.img} alt='' />}
+                <p>{message.text}</p>
+                <span>{formatDate(message?.createdAt?.seconds)}</span>
+              </div>
             </div>
-          </div>
-          <div className={styles.message}>
-            <div className={styles.texts}>
-              <p>testtttt asadsaaaaa sadasdsa</p>
-              <span>10:07 am</span>
-            </div>
-          </div>
-          <div className={clsx(styles.message, styles.own)}>
-            <div className={styles.texts}>
-              <p>testtttt</p>
-              <span>10:08 am</span>
-            </div>
-          </div>
+          ))}
+
           {img.url && (
             <div className={clsx(styles.message, styles.own)}>
               <div className={styles.texts}>
