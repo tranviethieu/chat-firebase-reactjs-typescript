@@ -42,6 +42,9 @@ function Chat({}: Props) {
     if (img.file) {
       imgUrl = await upload(img.file)
     }
+    if (text === '') {
+      return
+    }
     addDocument('messages', {
       text: text,
       uid: user?.uid,
