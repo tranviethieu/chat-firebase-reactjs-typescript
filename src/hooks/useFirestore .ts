@@ -14,7 +14,7 @@ const useFirestore = (namedb: string, condition: any) => {
         setDocuments([])
         return
       }
-
+      console.log(collectionRef)
       collectionRef = query(collectionRef, where(condition.fieldName, condition.operator, condition.compareValue))
     }
 

@@ -68,7 +68,7 @@ function ModelUpsertRoom() {
         >
           <div>
             <TextField
-              label='Size'
+              label='Tên phòng'
               size='small'
               value={form.name}
               onInput={(e: any) => setForm((prev) => ({ ...prev, name: e.target.value }))}
@@ -76,7 +76,7 @@ function ModelUpsertRoom() {
           </div>
           <div>
             <TextField
-              label='Size'
+              label='Mô tả'
               size='small'
               value={form.description}
               onInput={(e: any) => setForm((prev) => ({ ...prev, description: e.target.value }))}

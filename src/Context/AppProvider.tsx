@@ -26,7 +26,7 @@ export default function AppProvider({ children }: any) {
     () => rooms.find((room: any) => room.id === selectedRoomId) || {},
     [rooms, selectedRoomId]
   )
-  console.log(rooms)
+  console.log(selectedRoom)
   const usersCondition = React.useMemo(() => {
     return {
       fieldName: 'uid',

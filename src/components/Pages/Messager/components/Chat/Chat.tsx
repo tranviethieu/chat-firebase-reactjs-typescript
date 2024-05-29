@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styles from './Chat.module.scss'
 import { AuthContext, AuthContextType } from '../../../../../Context/AuthProvider'
 import SentimentSatisfiedTwoToneIcon from '@mui/icons-material/SentimentSatisfiedTwoTone'
-import VideocamIcon from '@mui/icons-material/Videocam'
+import AddIcCallIcon from '@mui/icons-material/AddIcCall'
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera'
 import PhoneIcon from '@mui/icons-material/Phone'
 import EmojiPicker from 'emoji-picker-react'
@@ -19,11 +19,14 @@ import useFirestore from '../../../../../hooks/useFirestore '
 import moment from 'moment'
 import { formatRelative } from 'date-fns'
 import upload from '../../../../../firebase/upload'
+import InviteMemberModal from '../ModelUpsertMember'
+import { Avatar, Tooltip } from 'antd'
+import { UserOutlined } from '@ant-design/icons'
 interface Props {}
 
 function Chat({}: Props) {
   const { user } = useContext(AuthContext) as AuthContextType
-  const { selectedRoom, members, setIsInviteMemberVisible } = useContext(AppContext)
+  const { selectedRoom, members, setIsInviteMemberVisible, isInviteMemberVisible } = useContext(AppContext)
   const [checkSize, setCheckSize] = useState<boolean>(true)
   const endRef = useRef<HTMLDivElement>(null)
   const [img, setImg] = useState({
@@ -92,6 +95,7 @@ function Chat({}: Props) {
 
     return formattedDate
   }
+  console.log(members)
   return (
     <div className={styles.main}>
       <div className={styles.chat}>
@@ -104,8 +108,29 @@ function Chat({}: Props) {
             </div>
           </div>
           <div className={styles.icons}>
-            <PhoneIcon />
-            <VideocamIcon />
+            <Avatar.Group
+              maxCount={2}
+              //shape='square'
+              size='large'
+              maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
+            >
+              {/* <Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=3' /> */}
+              {members?.map((e: any, index: number) => (
+                <Tooltip title={e?.displayName} placement='bottom'>
+                  <Avatar key={index} src={e?.photoURL} style={{ width: '100%', borderRadius: '50%' }} />
+                </Tooltip>
+              ))}
+            </Avatar.Group>
+            <div
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                setIsInviteMemberVisible(true)
+              }}
+            >
+              <AddIcCallIcon />
+            </div>
+
+            {/* <VideocamIcon /> */}
             <div
               style={{ cursor: 'pointer' }}
               onClick={() => {
@@ -161,6 +186,7 @@ function Chat({}: Props) {
         </div>
       </div>
       {checkSize && <div style={{ minWidth: '33%' }}>aaa</div>}
+      <InviteMemberModal />
     </div>
   )
 }

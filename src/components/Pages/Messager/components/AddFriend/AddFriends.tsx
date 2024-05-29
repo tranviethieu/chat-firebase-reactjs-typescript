@@ -11,9 +11,7 @@ import Rooms from '../Rooms/Rooms'
 import { Box } from '@mui/material'
 import AppProvider, { AppContext } from '../../../../../Context/AppProvider'
 import useDebounce from '../../../../../hooks/useDebounce'
-import { fetchUserList, searchUsers } from '../../../../../firebase/services'
-import { Input, Select, Spin } from 'antd'
-import DebounceSelect from '../../../../common/DebounceSelect'
+
 interface DataOption {
   label: string
   id: string
@@ -24,7 +22,7 @@ export interface UserValue {
 }
 function AddFriends() {
   const [value, setValue] = useState<UserValue[]>([])
-  const { setIsAddRoomVisible } = useContext(AppContext)
+  const { setIsAddRoomVisible, isAddRoomVisible } = useContext(AppContext)
   const [searchValue, setSearchValue] = useState('')
   const debouncedSearchValue = useDebounce(searchValue, 1000)
   const [options, setOptions] = useState([])
@@ -79,16 +77,6 @@ function AddFriends() {
           />
         </Stack>
 
-        <DebounceSelect
-          mode='multiple'
-          value={value}
-          placeholder='Select users'
-          fetchOptions={fetchUserList}
-          onChange={(newValue) => {
-            setValue(newValue as UserValue[])
-          }}
-          style={{ width: '100%' }}
-        />
         <Rooms />
       </Box>
     </div>
